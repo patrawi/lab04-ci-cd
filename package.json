@@ -8,7 +8,7 @@
     "test": "mocha test/*.js"
   },
   "author": "Sergei Kudinov",
-  "license": "",
+  "license": "MIT",
   "dependencies": {
     "express": "^4.17.2",
     "mixme": "^0.5.4",
