@@ -2,6 +2,7 @@ var redis = require("redis");
 const configure = require('./configure')
 
 const config = configure()
+console.log(config);
 var db = redis.createClient({
   host: config.redis.host,
   port: config.redis.port,
