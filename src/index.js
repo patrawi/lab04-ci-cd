@@ -7,7 +7,7 @@ const config = configure()
 // If REDIS_PORT is not set, the default port is 6379
 console.log(config.redis.host);
 const redisClient = redis.createClient({
-  host: process.env.REDIS_HOST,
+  host: config.redis.host,
   port: process.env.REDIS_PORT,
 });
 
