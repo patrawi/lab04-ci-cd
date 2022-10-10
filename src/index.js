@@ -5,10 +5,10 @@ const config = configure()
 // Creates a new Redis client
 // If REDIS_HOST is not set, the default host is localhost
 // If REDIS_PORT is not set, the default port is 6379
-
+console.log(config);
 const redisClient = redis.createClient({
-  host: config.redis.host,
-  port: config.redis.port,
+  host: process.env.REDIS_HOST,
+  port: process.env.REDIS_PORT,
 });
 
 redisClient.on("error", function(err) {
