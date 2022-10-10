@@ -1,30 +1,31 @@
-const express = require('express')
-const userRouter = require('./routes/user')
-const bodyParser = require('body-parser')
+const redis = require("redis");
 
-const app = express()
-const port = process.env.PORT || 3000
+// Creates a new Redis client
+// If REDIS_HOST is not set, the default host is localhost
+// If REDIS_PORT is not set, the default port is 6379
+const redisClient = redis.createClient({
+  host: process.env.REDIS_HOST,
+  port: process.env.REDIS_PORT  
+});
 
-const db = require('./dbClient')
-db.on("error", (err) => {
-  console.error(err)
-})
+redisClient.on("error", function(err) {
+    console.log("Error " + err);
+});
 
-app.use(bodyParser.urlencoded({
-  extended: false
-}))
-app.use(bodyParser.json())
+// Sets the key "octocat" to a value of "Mona the octocat"
+redisClient.set("octocat", "Mona the Octocat", redis.print);
+// Sets a key to "octocat", field to "species", and "value" to "Cat and Octopus"
+redisClient.hset("species", "octocat", "Cat and Octopus", redis.print);
+// Sets a key to "octocat", field to "species", and "value" to "Dinosaur and Octopus"
+redisClient.hset("species", "dinotocat", "Dinosaur and Octopus", redis.print);
+// Sets a key to "octocat", field to "species", and "value" to "Cat and Robot"
+redisClient.hset(["species", "robotocat", "Cat and Robot"], redis.print);
+// Gets all fields in "species" key
 
-app.get('/', (req, res) => {
-  res.send('Hello World!')
-})
-
-app.use('/user', userRouter)
-
-const server = app.listen(port, (err) => {
-  if (err) throw err
-  console.log("Server listening the port " + port)
-})
-
-
-module.exports = server
+redisClient.hkeys("species", function (err, replies) {
+    console.log(replies.length + " replies:");
+    replies.forEach(function (reply, i) {
+        console.log("    " + i + ": " + reply);
+    });
+    redisClient.quit();
+});
